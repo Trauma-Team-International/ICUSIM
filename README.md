@@ -1,27 +1,16 @@
 # ICU Burden Simulator
 Intensive Care Unit (ICU) burden simulator for python.
 
-### Benefits
-
-
-
 ### Logic
 
-"""
-- there is a certain number of patients at start day_total_cases
-- each day there are more new patients based on doubles_in_days
-- each day some patients will die based on case_fatality_rate
-- each day some patients are released based on mean_duration
-    - all patients that meet mean_duration and did not die are released
-- some patients can be admitted based on current available capacity
-    - such patients will be added to day_total_cases
-- some patients may not be admittable due to lack of current capacity
-    - such patients will die
-"""
-
-- There is no progression; ventilation need is decided upon admission
-- 
-
+- there is a certain number of patients to start with
+- patients are split between standard and ventilated ICU
+- patients can not move between standard and ventilated ICU
+- new patients come in based on `doubles_in_days` input parameter
+- as new patients come in, each has a probability to die
+- as new patients come in, each has a stay duration
+- released or dead, it happens when stay duration is completed
+- if there is less capacity than there is demand, patients will die accordingly
 
 ### Input Parameters
 

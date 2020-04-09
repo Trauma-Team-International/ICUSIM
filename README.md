@@ -1,7 +1,26 @@
-# ICU Burden Simulator
-Intensive Care Unit (ICU) burden simulator for python.
+<h1 align="center">
+  <br>
+  <a href="http://autonom.io"><img src="https://raw.githubusercontent.com/autonomio/ICUSIM/master/logo.png" alt="ICUSIM" width="250"></a>
+  <br>
+</h1>
 
-### Logic
+<h3 align="center">Intensive Care Unit Simulation</h3>
+
+<p align="center">
+  <a href="#what">what?</a> •
+  <a href="#gem-why">why?</a> •
+  <a href="#wrench-how">how?</a> •
+  <a href="#how-to-get-involved">how to get involved?</a> •
+  <a href="https://autonom.io">About Autonomio</a> •
+  <a href="https://github.com/autonomio/ICUSIM/issues">Issues</a> •
+  <a href="#License">License</a>
+</p>
+<hr>
+<p align="center">
+ICUSIM is a Monte Carlo simulator for understanding and forecasting the demand for Intensive Care Unit (ICU) and ventilation resources.
+</p>
+
+### What
 
 - there is a certain number of patients to start with
 - patients are split between standard and ventilated ICU

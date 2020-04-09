@@ -19,10 +19,11 @@ from enum import Enum
 import simpy
 import numpy as np
 
+
 class Hospital:
 
     def __init__(self,
-                 counter,
+                 hospital_resource_manager,
                  departments,
                  departments_capacity,
                  require_ventilation_rate,
@@ -32,10 +33,10 @@ class Hospital:
                  daily_died_total,
                  statistic,
                  icu_properties):
-        
-        self.counter = counter
+
+        self.hospital_resource_manager = hospital_resource_manager
         self.departments = departments
-        self.departments_capacity =  departments_capacity
+        self.departments_capacity = departments_capacity
         self.require_ventilation_rate = require_ventilation_rate
         self.daily_refused_total = daily_refused_total
         self.daily_accepted_total = daily_accepted_total
@@ -43,8 +44,8 @@ class Hospital:
         self.daily_died_total = daily_died_total
         self.statistic = statistic
         self.icu_properties = icu_properties
-        
-        
+
+
 class ICU_Types(Enum):
     standard_icu = 1
     ventilated_icu = 2
@@ -55,17 +56,20 @@ class ICU(object):
                  icu_type: ICU_Types,
                  stay_duration: float,
                  fatality_probability: float):
-                 self.icu_type = icu_type
-                 self.stay_duration = stay_duration
-                 self.fatality_probability = fatality_probability
+        self.icu_type = icu_type
+        self.stay_duration = stay_duration
+        self.fatality_probability = fatality_probability
 
 
-def hospital_manager(env, icu_type, hospital, hours_in_day):
+def hospital_manager(env,
+                     icu_type,
+                     hospital,
+                     hours_in_day):
     """A hospital_manager tries to place each patient while there exists free
     space.
     """
 
-    with hospital.counter.request() as my_turn:
+    with hospital.hospital_resource_manager.request() as my_turn:
         # Wait until its our turn
         result = yield my_turn
 
@@ -79,14 +83,11 @@ def hospital_manager(env, icu_type, hospital, hours_in_day):
 
         else:
             # Hold a place
-            dist = [1] * int(hospital.icu_properties[icu_type]['fatality_rate'] * 100) + \
-                   [0] * int((1 - hospital.icu_properties[icu_type]
-                              ['fatality_rate']) * 100)
+            _a_ = [1] * int(hospital.icu_properties[icu_type]['fatality_rate'] * 100)
+            _b_ = [0] * int((1 - hospital.icu_properties[icu_type]['fatality_rate']) * 100)
+            dist = _a_ + _b_
             patient_die = random.choice(dist)
-
-            out_time = abs(np.random.normal(
-                0, env.now + hospital.icu_properties[icu_type]['stay_duration']))
-
+            out_time = abs(np.random.normal(0, env.now + hospital.icu_properties[icu_type]['stay_duration']))
             icu = ICU(icu_type, out_time, patient_die)
 
             hospital.daily_accepted_total[icu_type] += 1
@@ -98,13 +99,13 @@ def hospital_manager(env, icu_type, hospital, hours_in_day):
 def update_statistic(env,
                      hospital,
                      hours_in_day):
+    # there should be +1 because simpy starts counting from 0
     nearest_hour = round(env.now+1)
     day_number = int(nearest_hour / hours_in_day)
-    """Update statistic every 24 hours"""
-
-    if ((nearest_hour != 0) and
-            (nearest_hour % hours_in_day == 0) and
-            (day_number not in hospital.statistic)):
+    _a_ = nearest_hour != 0
+    _b_ = nearest_hour % hours_in_day == 0
+    _c_ = day_number not in hospital.statistic
+    if _a_ and _b_ and _c_:
         standard_name = ICU_Types.standard_icu.name
         ventilated_name = ICU_Types.ventilated_icu.name
 
@@ -112,8 +113,9 @@ def update_statistic(env,
         total_demand = {icu_type: (hospital.daily_refused_total[icu_type] + hospital.daily_accepted_total[icu_type]) for icu_type in hospital.departments}
         total_released = {icu_type: hospital.daily_released_total[icu_type] for icu_type in hospital.departments}
         total_refused = {icu_type: hospital.daily_refused_total[icu_type] for icu_type in hospital.departments}
-        total_died = {standard_name: hospital.daily_died_total[standard_name],
-                      ventilated_name: (hospital.daily_died_total[ventilated_name] + total_died_refused_ventilated_icu)}
+        _total_ventilated_died_ = hospital.daily_died_total[ventilated_name] + total_died_refused_ventilated_icu
+        _total_standard_died_ = hospital.daily_died_total[standard_name]
+        total_died = {standard_name: _total_standard_died_, ventilated_name: _total_ventilated_died_}
 
         hospital.statistic.update({day_number: {
             'total_demand': total_demand,
@@ -173,13 +175,12 @@ def update_icu_departments(env,
     yield env.exit()
 
 
-def patients_arrivals(
-        env,
-        hospital,
-        hours_in_day,
-        patients_amount,
-        doubles_in_days,
-        update_frequency_in_hours):
+def patients_arrivals(env,
+                      hospital,
+                      hours_in_day,
+                      patients_amount,
+                      doubles_in_days,
+                      update_frequency_in_hours):
     """Emulating patient arriving"""
     update_timeout = 1
     while True:
@@ -190,12 +191,9 @@ def patients_arrivals(
                                                  doubles_in_days)
         # mean of hours and standard deviation of hours
         mu, sigma = (env.now + 13), 4
-        require_ventilation_rate = hospital.require_ventilation_rate + \
-            np.random.normal(0, 0.01)
-        total_standard_icu_population = round(
-            total_population * (1 - require_ventilation_rate))
-        total_ventilated_icu_population = round(
-            total_population * require_ventilation_rate)
+        require_ventilation_rate = hospital.require_ventilation_rate + np.random.normal(0, 0.01)
+        total_standard_icu_population = round(total_population * (1 - require_ventilation_rate))
+        total_ventilated_icu_population = round(total_population * require_ventilation_rate)
         arriving_standard_icu_distribution = np.random.normal(mu,
                                                               sigma,
                                                               int(total_standard_icu_population))
@@ -215,8 +213,7 @@ def patients_arrivals(
 
         for hour in range(1, 25):
             filtered_icu_entities = list(filter(
-                lambda icu_entity: (
-                    env.now <= icu_entity['arriving_date'] <= env.now + update_timeout),
+                lambda icu_entity: (env.now <= icu_entity['arriving_date'] <= env.now + update_timeout),
                 total_icu_arriving_distribution))
 
             for icu_entity in filtered_icu_entities:
@@ -227,7 +224,7 @@ def patients_arrivals(
                 env.process(update_icu_departments(env,
                                                    hospital,
                                                    update_frequency_in_hours))
-                                                   
+
             if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_statistic(env,
                                              hospital,
@@ -239,8 +236,7 @@ def patients_arrivals(
 def filter_icu_list_by_fatality_probability(icu_list, date_now):
     return list(
         filter(
-            lambda icu:
-                icu.stay_duration <= date_now and icu.fatality_probability,
+            lambda icu: icu.stay_duration <= date_now and icu.fatality_probability,
             icu_list))
 
 
@@ -260,29 +256,28 @@ def get_nearest_day(time_now, hours_in_day):
 
 
 def lists_diff(first, second):
-    second = set(second)
-    return [item for item in first if item not in second]
+    return [item for item in first if item not in set(second)]
 
 
-def get_population_by_day(
-        time_now,
-        hours_in_day,
-        patients_amount,
-        doubles_in_days) -> float:
-    return (((get_nearest_day(time_now, hours_in_day)/doubles_in_days)
-             * patients_amount)
-            + patients_amount)
+def get_population_by_day(time_now,
+                          hours_in_day,
+                          patients_amount,
+                          doubles_in_days) -> float:
+    return (((get_nearest_day(time_now, hours_in_day)/doubles_in_days) * patients_amount) + patients_amount)
 
 
 def get_daily_incoming_rate(hours_in_day, population) -> float:
     return hours_in_day / population
 
 
-def generate_random_icu_list(icu_count: int, icu_stay_duration: int, icu_type: str, hours_in_day: int) -> list:
-    return list(map(
-        lambda stay_duration: ICU(icu_type, round(
-            stay_duration), np.random.choice(2, 1)[0]),
-        np.random.normal(icu_stay_duration, hours_in_day*2, icu_count)))
+def generate_random_icu_list(icu_count: int,
+                             icu_stay_duration: int,
+                             icu_type: str,
+                             hours_in_day: int) -> list:
+    return list(
+        map(
+            lambda stay_duration: ICU(icu_type, round(stay_duration), np.random.choice(2, 1)[0]),
+            np.random.normal(icu_stay_duration, hours_in_day*2, icu_count)))
 
 
 def simulate(p: dict = {
@@ -297,64 +292,63 @@ def simulate(p: dict = {
              'standard_icu_stay_duration': 10,
              'ventilated_icu_stay_duration': 10},
              random_seed=None):
-  
+
     starting_standard_icu_count = int(p['initial_patient_count'] * (1 - p['require_ventilation_rate']))
-    starting_ventilated_icu_count = int(p['initial_patient_count'] * p['require_ventilation_rate']) 
+    starting_ventilated_icu_count = int(p['initial_patient_count'] * p['require_ventilation_rate'])
 
     _a_ = starting_standard_icu_count > p['standard_icu_capacity']
     _b_ = starting_ventilated_icu_count > p['ventilated_icu_capacity']
-    
+
     if (_a_ or _b_):
-        raise Exception("Starting amount can't be bigger then capacity!")    
-    
+        raise Exception("Starting amount can't be bigger then capacity!")
+
     hours_in_day = 24
     update_frequency_in_hours = 1
 
     hours_to_simulate = p['days_to_simulate'] * hours_in_day
     standard_icu_stay_duration = p['standard_icu_stay_duration'] * hours_in_day
     ventilated_icu_stay_duration = p['ventilated_icu_stay_duration'] * hours_in_day
-    
+
     if random_seed is not None:
         random.seed(random_seed)
-    
+
     # init stuff
     env = simpy.Environment()
-    counter = simpy.Resource(env, capacity=1)
+    hospital_resource_manager = simpy.Resource(env, capacity=1)
     statistic = {}
     departments = [ICU_Types.standard_icu.name, ICU_Types.ventilated_icu.name]
-    
+
     _temp_standard_icu_list_ = generate_random_icu_list(starting_standard_icu_count,
                                                         p['standard_icu_stay_duration'],
                                                         ICU_Types.standard_icu.name,
                                                         hours_in_day)
-    
+
     _temp_ventilated_icu_list_ = generate_random_icu_list(starting_ventilated_icu_count,
                                                           p['ventilated_icu_stay_duration'],
-                                                          ICU_Types.ventilated_icu.name,hours_in_day)
-    
+                                                          ICU_Types.ventilated_icu.name,
+                                                          hours_in_day)
+
     _temp_standard_icu_dict_ = {'capacity': p['standard_icu_capacity'], 'icu_list': _temp_standard_icu_list_}
     _temp_ventilated_icu_dict_ = {'capacity': p['ventilated_icu_capacity'], 'icu_list': _temp_ventilated_icu_list_}
 
-    
     departments_capacity = {ICU_Types.standard_icu.name: _temp_standard_icu_dict_,
                             ICU_Types.ventilated_icu.name: _temp_ventilated_icu_dict_}
 
-
     _temp_standard_icu_meta_ = {'fatality_rate': p['standard_icu_fatality_rate'],
                                 'stay_duration': p['standard_icu_stay_duration']}
-    
+
     _temp_ventilated_icu_meta_ = {'fatality_rate': p['ventilated_icu_fatality_rate'],
                                   'stay_duration': p['ventilated_icu_stay_duration']}
-    
+
     icu_properties = {ICU_Types.standard_icu.name: _temp_standard_icu_meta_,
                       ICU_Types.ventilated_icu.name: _temp_ventilated_icu_meta_}
-    
+
     daily_released_total = {icu_type: 0 for icu_type in departments}
     daily_refused_total = {icu_type: 0 for icu_type in departments}
     daily_accepted_total = {icu_type: 0 for icu_type in departments}
     daily_died_total = {icu_type: 0 for icu_type in departments}
-    
-    hospital = Hospital(counter,
+
+    hospital = Hospital(hospital_resource_manager,
                         departments,
                         departments_capacity,
                         p['require_ventilation_rate'],
@@ -372,7 +366,7 @@ def simulate(p: dict = {
                                                 p['initial_patient_count'],
                                                 p['doubles_in_days'],
                                                 update_frequency_in_hours)
-    
+
     env.process(_temp_patients_arrival_)
     env.run(until=hours_to_simulate)
 
@@ -413,18 +407,18 @@ def stats_to_dataframe(results):
     return df
 
 
-def dump_dictionary(obj):
+def _dump_dictionary_(obj):
     if isinstance(obj, dict):
         for k, v in obj.items():
             if hasattr(v, '__iter__'):
                 print(k)
-                dump_dictionary(v)
+                _dump_dictionary_(v)
             else:
                 print('%s : %s' % (k, v))
     elif isinstance(obj, list):
         for v in obj:
             if hasattr(v, '__iter__'):
-                dump_dictionary(v)
+                _dump_dictionary_(v)
             else:
                 print(v)
     else:
@@ -432,14 +426,14 @@ def dump_dictionary(obj):
 
 
 def params():
-    
+
     import random
     import numpy as np
-    
+
     _capacity_ = random.choice(list(range(200, 1000, 50)))
     _fatality_rate_ = round(random.choice(np.arange(0.2, 0.6, .01)), 2)
     _duration_ = random.choice(list(range(8, 25, 50)))
-    
+
     p = {
          'initial_patient_count': 120,
          'require_ventilation_rate': round(random.choice(np.arange(.5, .7, .01)), 3),
@@ -454,8 +448,8 @@ def params():
          'standard_icu_stay_duration': int(_duration_),
          'ventilated_icu_stay_duration': int(_duration_ * (np.random.normal(1, 0.01) * 1.1)),
     }
-    
+
     for key in p.keys():
-        print(key,p[key])
-    
+        print(key, p[key])
+
     return p

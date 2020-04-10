@@ -27,7 +27,7 @@ ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality si
 - Input parameter ranges are based on empirical evidence
 - There is no ambiquity in terms of results
 
-An example of 
+**Fig 1:** An example of simulation result where we test how often peak daily demand for standard ICU capacity stays below 278 (the official forecast of THL in Finland). 
 
 <img src=https://media.discordapp.net/attachments/696359200774684745/698103055803220019/9jMw10xwcwAAAABJRU5ErkJggg.png>
 

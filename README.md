@@ -117,12 +117,6 @@ def params(show_params=False):
     return p
 ```
 
-Next, install the ICUSIM package:
-
-```
-pip install icusim
-```
-
 Run a single simulation: 
 
 ```

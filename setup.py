@@ -39,7 +39,7 @@ if __name__ == "__main__":
           version=VERSION,
           download_url=DOWNLOAD_URL,
           install_requires=install_requires,
-          packages=['icustay'],
+          packages=['icusim'],
 
           classifiers=['Intended Audience :: Science/Research',
                        'Programming Language :: Python :: 3.5',

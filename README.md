@@ -20,6 +20,8 @@
 ICUSIM is a Monte Carlo simulator for understanding and forecasting the demand for Intensive Care Unit (ICU) and ventilation resources.
 </p>
 
+<hr>
+
 ### What?
 
 ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality simulation. The simulation is based on a logic that closely resembles the current empirical understanding of the problem. The power of Monte Carlo simulation can be summarized in two points: 
@@ -33,10 +35,14 @@ ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality si
 
 This allows the consumer of the information to establish their own point-of-view regarding how likely a certain outcome may be. The Monte Carlo method entirely takes away doubt from the question "given a range of parameters, how often so and so values appear".
 
+<hr>
+
 ### Why?
 
 - Make forecasts to increased preparadness
 - Test plausibility of forecasts made with other method
+
+<hr>
 
 ### How?
 
@@ -66,6 +72,7 @@ name | default | description
 `standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
 `ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
 
+<hr>
 
 ### 💾 Install
 
@@ -153,6 +160,7 @@ columns = stats_to_dataframe(simulate(params())).columns.tolist()
 
 df.columns = columns
 ```
+<hr>
 
 ### 💬 How to get Support
 
@@ -168,9 +176,9 @@ df.columns = columns
 
 ### 📢 Citations
 
-If you use Talos for published work, please cite:
+If you use ICUSIM for published work, please cite:
 
-`Autonomio Talos [Computer software]. (2019). Retrieved from http://github.com/autonomio/talos.`
+`Autonomio's ICUSIM [Computer software]. (2020). Retrieved from http://github.com/autonomio/ICUSIM.`
 
 <hr>
 

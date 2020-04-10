@@ -36,7 +36,7 @@ def params(initial_patient_count=120,
     _capacity_ = random.choice(range(capacity_min, capacity_max, 50))
     
     # set the fraction of ventilation capacity
-    _ventilated_capacity_ = (_random_normal_ * ventilated_icu_share)
+    _ventilated_capacity_ = (_random_normal_ * ventilated_icu_factor)
     
     # set standard case fatality rate
     _fatality_rate_ = random.choice(np.arange(fatality_rate_min, fatality_rate_max, step=.01))

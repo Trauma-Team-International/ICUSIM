@@ -31,7 +31,6 @@ def params(initial_patient_count=120,
     
     # change scale for stronger random effect (only applies to normally distributed)
     _random_normal_ = np.random.normal(loc=1, scale=0.01)
-    _random_normal_
     
     # set max capacity 
     _capacity_ = random.choice(list(range(capacity_min, capacity_max, step=50)))

@@ -1,20 +1,20 @@
-def params(initial_patient_count =120
-           days_to_simulate = 50
-           capacity_min = 200
-           capacity_max = 1000
-           ventilated_icu_factor = .5
-           fatality_rate_min = .2
-           fatality_rate_max = .6
-           ventilated_cfr_min = 1.3
-           ventilated_cfr_max = 1.7
-           standard_duration_min = 8
-           standard_duration_max = 25
-           ventilated_duration_factor_min = 1
-           ventilated_duration_factor_max = 1.2
-           doubles_in_days_min = 2.0
-           doubles_in_days_max = 12.0
-           ventilation_rate_min = .3
-           ventilation_rate_max = .8
+def params(initial_patient_count=120,
+           days_to_simulate=50,
+           capacity_min=200,
+           capacity_max=1000,
+           ventilated_icu_factor=.5,
+           fatality_rate_min=.2,
+           fatality_rate_max=.6,
+           ventilated_cfr_min=1.3,
+           ventilated_cfr_max=1.7,
+           standard_duration_min=8,
+           standard_duration_max=25,
+           ventilated_duration_factor_min=1,
+           ventilated_duration_factor_max=1.2,
+           doubles_in_days_min=2.0,
+           doubles_in_days_max=12.0,
+           ventilation_rate_min=.3,
+           ventilation_rate_max=.8,
            show_params=False):
     
     '''

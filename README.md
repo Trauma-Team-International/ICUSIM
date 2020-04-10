@@ -160,6 +160,11 @@ columns = stats_to_dataframe(simulate(params())).columns.tolist()
 
 df.columns = columns
 ```
+Draw a histogram for analyzing the results:
+
+```
+astetik.hist(df, 'ventilated_icu_total_demand')
+```
 <hr>
 
 ### 💬 How to get Support

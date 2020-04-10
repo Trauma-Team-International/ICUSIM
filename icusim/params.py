@@ -33,7 +33,7 @@ def params(initial_patient_count=120,
     _random_normal_ = np.random.normal(loc=1, scale=0.01)
     
     # set max capacity 
-    _capacity_ = random.choice(list(range(capacity_min, capacity_max, step=50)))
+    _capacity_ = random.choice(range(capacity_min, capacity_max, 50))
     
     # set the fraction of ventilation capacity
     _ventilated_capacity_ = (_random_normal_ * ventilated_icu_share)

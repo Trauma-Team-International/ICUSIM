@@ -45,7 +45,7 @@ def params(initial_patient_count=120,
     _ventilated_fatality_factor_ = random.choice(np.arange(ventilated_cfr_min, ventilated_cfr_max, step=0.01))
     
     # set the mean duration of standard ICU stay (ventilated is based on it
-    _standard_icu_stay_duration_ = random.choice(range(standard_duration_min, standard_duration_max, step=1))
+    _standard_icu_stay_duration_ = random.choice(range(standard_duration_min, standard_duration_max, 1))
                        
     # set a multiplier for ventilated stay duration
     _temp_ = np.arange(ventilated_duration_factor_min, ventilated_duration_factor_max, step=0.01)                   

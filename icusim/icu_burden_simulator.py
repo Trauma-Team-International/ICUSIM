@@ -74,7 +74,7 @@ def hospital_manager(env,
             _b_ = [0] * int((1 - hospital.icu_properties[icu_type]['fatality_rate']) * 100)
             dist = _a_ + _b_
             patient_die = random.choice(dist)
-            out_time = abs(np.random.normal(0, env.now + hospital.icu_properties[icu_type]['stay_duration']))
+            out_time = abs(np.random.normal(env.now, hospital.icu_properties[icu_type]['stay_duration']))
             icu = ICU(icu_type, out_time, patient_die)
 
             hospital.daily_accepted_total[icu_type] += 1
@@ -208,11 +208,11 @@ def patients_arrivals(env,
                                              icu_entity['icu_type'],
                                              hospital,
                                              hours_in_day))
+
+            if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_icu_departments(env,
                                                    hospital,
                                                    update_frequency_in_hours))
-
-            if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_statistic(env,
                                              hospital,
                                              hours_in_day))
@@ -322,10 +322,10 @@ def simulate(p: dict = {
                             ICU_Types.ventilated_icu.name: _temp_ventilated_icu_dict_}
 
     _temp_standard_icu_meta_ = {'fatality_rate': p['standard_icu_fatality_rate'],
-                                'stay_duration': p['standard_icu_stay_duration']}
+                                'stay_duration': standard_icu_stay_duration}
 
     _temp_ventilated_icu_meta_ = {'fatality_rate': p['ventilated_icu_fatality_rate'],
-                                  'stay_duration': p['ventilated_icu_stay_duration']}
+                                  'stay_duration': ventilated_icu_stay_duration}
 
     icu_properties = {ICU_Types.standard_icu.name: _temp_standard_icu_meta_,
                       ICU_Types.ventilated_icu.name: _temp_ventilated_icu_meta_}

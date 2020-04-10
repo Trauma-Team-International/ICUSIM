@@ -479,6 +479,3 @@ def params(show_params=False):
             print(key, p[key])
 
     return p
-
-
-stats_to_dataframe(simulate(params()))

@@ -20,9 +20,27 @@
 ICUSIM is a Monte Carlo simulator for understanding and forecasting the demand for Intensive Care Unit (ICU) and ventilation resources.
 </p>
 
-### What
+### What?
 
-ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality simulation. The simulation is based on a logic that closely resembles the current empirical understanding of the problem.
+ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality simulation. The simulation is based on a logic that closely resembles the current empirical understanding of the problem. The power of Monte Carlo simulation can be summarized in two points: 
+
+- Input parameter ranges are based on empirical evidence
+- There is no ambiquity in terms of results
+
+An example of 
+
+<img src=https://media.discordapp.net/attachments/696359200774684745/698103055803220019/9jMw10xwcwAAAABJRU5ErkJggg.png>
+
+This allows the consumer of the information to establish their own point-of-view regarding how likely a certain outcome may be. The Monte Carlo method entirely takes away doubt from the question "given a range of parameters, how often so and so values appear".
+
+### Why?
+
+- Make forecasts to increased preparadness
+- Test plausibility of forecasts made with other method
+
+### How?
+
+ICUSIM follows a straightforward logic:
 
 - There is a certain number of patients to start with
 - Patients are split between standard and ventilated ICU
@@ -47,6 +65,9 @@ name | default | description
 `ventilated_icu_fatality_rate` | 0.8 | case fatality rate for ventilated ICU patients
 `standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
 `ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
+
+
+
 
 Parameters can be generated randomly with the below function:
 ```

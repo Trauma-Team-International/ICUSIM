@@ -22,18 +22,20 @@ ICUSIM is a Monte Carlo simulator for understanding and forecasting the demand f
 
 ### What
 
-- there is a certain number of patients to start with
-- patients are split between standard and ventilated ICU
-- patients can not move between standard and ventilated ICU
-- new patients come in based on `doubles_in_days` input parameter
-- as new patients come in, each has a probability to die
-- as new patients come in, each has a stay duration
-- released or dead, it happens when stay duration is completed
-- if there is less capacity than there is demand, patients will die accordingly
+ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality simulation. The simulation is based on a logic that closely resembles the current empirical understanding of the problem.
 
-### Input Parameters
+- There is a certain number of patients to start with
+- Patients are split between standard and ventilated ICU
+- Patients can not move between standard and ventilated ICU
+- New patients come in based on `doubles_in_days` input parameter
+- As new patients come in, each is assigned with a probability to survive
+- As new patients come in, each is assigned a stay duration
+- Released or dead, it happens when stay duration is completed
+- If there is less capacity than there is demand, patients will die accordingly
 
-name | default | what is it?
+Outcomes are controlled through **Input Parameters**, which are provided separately for _standard ICU_ and _ventilated ICU_.
+
+name | default | description
 --- | --- | --- 
 `initial_patient_count` | 120 | number of patients to start with
 `require_ventilation_rate` | 0.3 | percentage of patients requiring ventilation

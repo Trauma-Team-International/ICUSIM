@@ -87,7 +87,7 @@ def hospital_manager(env,
             _b_ = [0] * int((1 - hospital.icu_properties[icu_type]['fatality_rate']) * 100)
             dist = _a_ + _b_
             patient_die = random.choice(dist)
-            out_time = abs(np.random.normal(0, env.now + hospital.icu_properties[icu_type]['stay_duration']))
+            out_time = abs(np.random.normal(env.now, hospital.icu_properties[icu_type]['stay_duration']))
             icu = ICU(icu_type, out_time, patient_die)
 
             hospital.daily_accepted_total[icu_type] += 1
@@ -221,11 +221,11 @@ def patients_arrivals(env,
                                              icu_entity['icu_type'],
                                              hospital,
                                              hours_in_day))
+
+            if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_icu_departments(env,
                                                    hospital,
                                                    update_frequency_in_hours))
-
-            if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_statistic(env,
                                              hospital,
                                              hours_in_day))
@@ -335,10 +335,10 @@ def simulate(p: dict = {
                             ICU_Types.ventilated_icu.name: _temp_ventilated_icu_dict_}
 
     _temp_standard_icu_meta_ = {'fatality_rate': p['standard_icu_fatality_rate'],
-                                'stay_duration': p['standard_icu_stay_duration']}
+                                'stay_duration': standard_icu_stay_duration}
 
     _temp_ventilated_icu_meta_ = {'fatality_rate': p['ventilated_icu_fatality_rate'],
-                                  'stay_duration': p['ventilated_icu_stay_duration']}
+                                  'stay_duration': ventilated_icu_stay_duration}
 
     icu_properties = {ICU_Types.standard_icu.name: _temp_standard_icu_meta_,
                       ICU_Types.ventilated_icu.name: _temp_ventilated_icu_meta_}
@@ -426,29 +426,29 @@ def _dump_dictionary_(obj):
 
 
 def params(show_params=False):
-    
+
     '''
     Creates input parameters for simulate().
     '''
-    
+
     import random
     import numpy as np
-    
-    # set max capacity 
+
+    # set max capacity
     _capacity_ = random.choice(list(range(200, 1000, 50)))
-    
+
     # set the fraction of ventilation capacity
     _ventilated_capacity_ = (np.random.normal(1, 0.01) * .5)
-    
+
     # set standard case fatality rate
     _fatality_rate_ = round(random.choice(np.arange(0.2, 0.6, .01)), 2)
-    
+
     # set ventilated case fatality rate
     _ventilated_fatality_factor_ = random.choice(np.arange(1.3, 1.7, 0.01))
-    
+
     # set a multiplier for ventilated stay duration
     _ventilated_duration_factor_ = random.choice(np.arange(1, 1.2, 0.01))
-    
+
     # initialize values
     initial_patient_count = 120
     days_to_simulate = 50
@@ -460,7 +460,7 @@ def params(show_params=False):
     ventilated_icu_fatality_rate = round(_fatality_rate_ * (np.random.normal(1, 0.01) * _ventilated_fatality_factor_), 2)
     standard_icu_stay_duration = int(random.choice(list(range(8, 25, 1))))
     ventilated_icu_stay_duration = int(standard_icu_stay_duration * (np.random.normal(1, 0.01) * _ventilated_duration_factor_))
-    
+
     # generates the input parameters
     p = {'initial_patient_count': initial_patient_count,
          'days_to_simulate': days_to_simulate,
@@ -472,10 +472,13 @@ def params(show_params=False):
          'ventilated_icu_fatality_rate': ventilated_icu_fatality_rate,
          'standard_icu_stay_duration': standard_icu_stay_duration,
          'ventilated_icu_stay_duration': ventilated_icu_stay_duration}
-    
+
     # print out the params
     if show_params:
         for key in p.keys():
-            print(key,p[key])
-    
+            print(key, p[key])
+
     return p
+
+
+stats_to_dataframe(simulate(params()))

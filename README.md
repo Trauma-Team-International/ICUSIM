@@ -66,9 +66,6 @@ name | default | description
 `standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
 `ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
 
-
-
-
 Parameters can be generated randomly with the below function:
 ```
 def params(show_params=False):
@@ -104,10 +101,28 @@ def params(show_params=False):
     return p
 ```
 
-#### Use
+### Start Simulating
+
+Start by installing the package:
 
 ```
-from tqdm import tqdm
+pip install icusim
+```
+
+Run a single simulation: 
+
+```
+import icusim
+
+params = icusim.params()
+icusim.simulate(params)
+```
+
+Run many simulations:
+
+```
+import icusim
+import tqdm
 
 out = []
 
@@ -116,19 +131,17 @@ for i in tqdm(range(1000)):
     results = simulate(params())
     df = stats_to_dataframe(results)
     
-    total_refused = df.standard_icu_total_refused + df.ventilated_icu_total_refused
-    total_refused = sum((total_refused > 0).astype(int))
-    
     round_out = df.max().tolist()
     
-    out.append(round_out + [total_refused])
+    out.appendround_out)
 ```
-And
+Get the results onto a dataframe:
+
 ```
 import pandas as pd
 
 df = pd.DataFrame(out)
-columns = stats_to_dataframe(simulate(params())).columns.tolist() + ['expired_because_refused']
+columns = stats_to_dataframe(simulate(params())).columns.tolist()
 
 df.columns = columns
 ```

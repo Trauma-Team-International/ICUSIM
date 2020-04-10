@@ -169,8 +169,8 @@ df.columns = columns
 | **...troubleshoot**           | [GitHub Issue Tracker]                   |
 | **...report a bug**           | [GitHub Issue Tracker]                                     |
 | **...suggest a new feature**  | [GitHub Issue Tracker]                                     |
-| **...get support**            | [GitHub Issue Tracker]  · [Spectrum Chat]                         |
-| **...have a discussion**      | [Spectrum Chat]                                            |
+| **...get support**            | [GitHub Issue Tracker]  · [Discord Chat]                         |
+| **...have a discussion**      | [Discord Chat]                                            |
 
 <hr>
 

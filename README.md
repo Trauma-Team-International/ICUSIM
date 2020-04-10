@@ -8,9 +8,9 @@
 
 <p align="center">
   <a href="#what">what?</a> •
-  <a href="#gem-why">why?</a> •
-  <a href="#wrench-how">how?</a> •
-  <a href="#how-to-get-involved">how to get involved?</a> •
+  <a href="#why">why?</a> •
+  <a href="#how">how?</a> •
+  <a href="#start-simulating">start simulating</a> •
   <a href="https://autonom.io">About Autonomio</a> •
   <a href="https://github.com/autonomio/ICUSIM/issues">Issues</a> •
   <a href="#License">License</a>
@@ -65,6 +65,19 @@ name | default | description
 `ventilated_icu_fatality_rate` | 0.8 | case fatality rate for ventilated ICU patients
 `standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
 `ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
+
+
+### 💾 Install
+
+Released version:
+
+#### `pip install talos`
+
+Daily development version:
+
+#### `pip install git+https://github.com/autonomio/ICUSIM`
+
+<hr>
 
 ### Start Simulating
 
@@ -146,3 +159,31 @@ columns = stats_to_dataframe(simulate(params())).columns.tolist()
 
 df.columns = columns
 ```
+
+### 💬 How to get Support
+
+| I want to...                     | Go to...                                                  |
+| -------------------------------- | ---------------------------------------------------------- |
+| **...troubleshoot**           | [GitHub Issue Tracker]                   |
+| **...report a bug**           | [GitHub Issue Tracker]                                     |
+| **...suggest a new feature**  | [GitHub Issue Tracker]                                     |
+| **...get support**            | [GitHub Issue Tracker]  · [Spectrum Chat]                         |
+| **...have a discussion**      | [Spectrum Chat]                                            |
+
+<hr>
+
+### 📢 Citations
+
+If you use Talos for published work, please cite:
+
+`Autonomio Talos [Computer software]. (2019). Retrieved from http://github.com/autonomio/talos.`
+
+<hr>
+
+### 📃 License
+
+[MIT License](https://github.com/autonomio/talos/blob/master/LICENSE)
+
+[github issue tracker]: https://github.com/automio/talos/issues
+[discord chat]: https://discord.gg/55QDD9
+

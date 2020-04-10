@@ -1,16 +1,3 @@
-"""
-Scenario:
-- there is a certain number of patients at start day_total_cases
-- each day there are more new patients based on doubles_in_days
-- each day some patients will die based on case_fatality_rate
-- each day some patients are released based on mean_duration
-    - all patients that meet mean_duration and did not die are released
-- some patients can be admitted based on current available capacity
-    - such patients will be added to day_total_cases
-- some patients may not be admittable due to lack of current capacity
-    - such patients will die
-"""
-
 import collections
 import random
 import math
@@ -371,55 +358,3 @@ def simulate(p: dict = {
     env.run(until=hours_to_simulate)
 
     return hospital.statistic
-
-
-def stats_to_dataframe(results):
-
-    import pandas as pd
-
-    # pd.set_option("display.max_rows", 5)
-    # pd.set_option("display.max_columns", 7)
-    # pd.set_option('display.width', None)
-
-    out = []
-    cols = []
-
-    # get day key
-    for day in results.keys():
-
-        _temp_ = []
-        cols = []
-
-        # get metric name key
-        for metric in results[day].keys():
-
-            _temp_.append(results[day][metric]['standard_icu'])
-            _temp_.append(results[day][metric]['ventilated_icu'])
-
-            cols.append('standard_icu_' + metric)
-            cols.append('ventilated_icu_' + metric)
-
-        out.append(_temp_)
-
-    df = pd.DataFrame(out)
-    df.columns = cols
-
-    return df
-
-
-def _dump_dictionary_(obj):
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            if hasattr(v, '__iter__'):
-                print(k)
-                _dump_dictionary_(v)
-            else:
-                print('%s : %s' % (k, v))
-    elif isinstance(obj, list):
-        for v in obj:
-            if hasattr(v, '__iter__'):
-                _dump_dictionary_(v)
-            else:
-                print(v)
-    else:
-        print(obj)

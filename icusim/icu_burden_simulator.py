@@ -221,7 +221,6 @@ def patients_arrivals(env,
                                              icu_entity['icu_type'],
                                              hospital,
                                              hours_in_day))
-            
 
             if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_icu_departments(env,

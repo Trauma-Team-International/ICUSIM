@@ -66,7 +66,10 @@ name | default | description
 `standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
 `ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
 
-Parameters can be generated randomly with the below function:
+### Start Simulating
+
+The first step is to create a `params` function that handles randomly picking parameters and where the various parameter ranges are set. Make sure to follow parameter ranges that you can established with available empirical evidence. An fully functional example that is relevant for Finland is provided below. You can simply change the values to meet the evidence for the area/s of your interest.
+
 ```
 def params(show_params=False):
     
@@ -101,9 +104,7 @@ def params(show_params=False):
     return p
 ```
 
-### Start Simulating
-
-Start by installing the package:
+Next, install the ICUSIM package:
 
 ```
 pip install icusim

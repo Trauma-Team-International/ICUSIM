@@ -40,7 +40,7 @@ This allows the consumer of the information to establish their own point-of-view
 ### Why?
 
 - Make forecasts to increased preparadness
-- Test plausibility of forecasts made with other method
+- Test plausibility of forecasts made with other methods
 
 <hr>
 

@@ -1,20 +1,65 @@
-# ICU Burden Simulator
-Intensive Care Unit (ICU) burden simulator for python.
+<h1 align="center">
+  <br>
+  <a href="http://autonom.io"><img src="https://raw.githubusercontent.com/autonomio/ICUSIM/master/logo.png" alt="ICUSIM" width="250"></a>
+  <br>
+</h1>
 
-### Logic
+<h3 align="center">Intensive Care Unit Simulation</h3>
 
-- there is a certain number of patients to start with
-- patients are split between standard and ventilated ICU
-- patients can not move between standard and ventilated ICU
-- new patients come in based on `doubles_in_days` input parameter
-- as new patients come in, each has a probability to die
-- as new patients come in, each has a stay duration
-- released or dead, it happens when stay duration is completed
-- if there is less capacity than there is demand, patients will die accordingly
+<p align="center">
+  <a href="#what">what?</a> •
+  <a href="#why">why?</a> •
+  <a href="#how">how?</a> •
+  <a href="#start-simulating">start simulating</a> •
+  <a href="https://autonom.io">About Autonomio</a> •
+  <a href="https://github.com/autonomio/ICUSIM/issues">Issues</a> •
+  <a href="#License">License</a>
+</p>
+<hr>
+<p align="center">
+ICUSIM is a Monte Carlo simulator for understanding and forecasting the demand for Intensive Care Unit (ICU) and ventilation resources.
+</p>
 
-### Input Parameters
+<hr>
 
-name | default | what is it?
+### What?
+
+ICUSIM dramatically simplifies the process ICU demand, capacity, and fatality simulation. The simulation is based on a logic that closely resembles the current empirical understanding of the problem. The power of Monte Carlo simulation can be summarized in two points: 
+
+- Input parameter ranges are based on empirical evidence
+- There is no ambiquity in terms of results
+
+**Fig 1:** An example of simulation result where we test how often peak daily demand for standard ICU capacity stays below 278 (the official forecast of THL in Finland). 
+
+<img src=https://media.discordapp.net/attachments/696359200774684745/698103055803220019/9jMw10xwcwAAAABJRU5ErkJggg.png>
+
+This allows the consumer of the information to establish their own point-of-view regarding how likely a certain outcome may be. The Monte Carlo method entirely takes away doubt from the question "given a range of parameters, how often so and so values appear".
+
+<hr>
+
+### Why?
+
+- Make forecasts to increased preparadness
+- Test plausibility of forecasts made with other method
+
+<hr>
+
+### How?
+
+ICUSIM follows a straightforward logic:
+
+- There is a certain number of patients to start with
+- Patients are split between standard and ventilated ICU
+- Patients can not move between standard and ventilated ICU
+- New patients come in based on `doubles_in_days` input parameter
+- As new patients come in, each is assigned with a probability to survive
+- As new patients come in, each is assigned a stay duration
+- Released or dead, it happens when stay duration is completed
+- If there is less capacity than there is demand, patients will die accordingly
+
+Outcomes are controlled through **Input Parameters**, which are provided separately for _standard ICU_ and _ventilated ICU_.
+
+name | default | description
 --- | --- | --- 
 `initial_patient_count` | 120 | number of patients to start with
 `require_ventilation_rate` | 0.3 | percentage of patients requiring ventilation
@@ -27,7 +72,24 @@ name | default | what is it?
 `standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
 `ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
 
-Parameters can be generated randomly with the below function:
+<hr>
+
+### 💾 Install
+
+Released version:
+
+#### `pip install talos`
+
+Daily development version:
+
+#### `pip install git+https://github.com/autonomio/ICUSIM`
+
+<hr>
+
+### Start Simulating
+
+The first step is to create a `params` function that handles randomly picking parameters and where the various parameter ranges are set. Make sure to follow parameter ranges that you can established with available empirical evidence. An fully functional example that is relevant for Finland is provided below. You can simply change the values to meet the evidence for the area/s of your interest.
+
 ```
 def params(show_params=False):
     
@@ -62,10 +124,20 @@ def params(show_params=False):
     return p
 ```
 
-#### Use
+Run a single simulation: 
 
 ```
-from tqdm import tqdm
+import icusim
+
+params = icusim.params()
+icusim.simulate(params)
+```
+
+Run many simulations:
+
+```
+import icusim
+import tqdm
 
 out = []
 
@@ -74,19 +146,51 @@ for i in tqdm(range(1000)):
     results = simulate(params())
     df = stats_to_dataframe(results)
     
-    total_refused = df.standard_icu_total_refused + df.ventilated_icu_total_refused
-    total_refused = sum((total_refused > 0).astype(int))
-    
     round_out = df.max().tolist()
     
-    out.append(round_out + [total_refused])
+    out.appendround_out)
 ```
-And
+Get the results onto a dataframe:
+
 ```
 import pandas as pd
 
 df = pd.DataFrame(out)
-columns = stats_to_dataframe(simulate(params())).columns.tolist() + ['expired_because_refused']
+columns = stats_to_dataframe(simulate(params())).columns.tolist()
 
 df.columns = columns
 ```
+Draw a histogram for analyzing the results:
+
+```
+astetik.hist(df, 'ventilated_icu_total_demand')
+```
+<hr>
+
+### 💬 How to get Support
+
+| I want to...                     | Go to...                                                  |
+| -------------------------------- | ---------------------------------------------------------- |
+| **...troubleshoot**           | [GitHub Issue Tracker]                   |
+| **...report a bug**           | [GitHub Issue Tracker]                                     |
+| **...suggest a new feature**  | [GitHub Issue Tracker]                                     |
+| **...get support**            | [GitHub Issue Tracker]  · [Discord Chat]                         |
+| **...have a discussion**      | [Discord Chat]                                            |
+
+<hr>
+
+### 📢 Citations
+
+If you use ICUSIM for published work, please cite:
+
+`Autonomio's ICUSIM [Computer software]. (2020). Retrieved from http://github.com/autonomio/ICUSIM.`
+
+<hr>
+
+### 📃 License
+
+[MIT License](https://github.com/autonomio/talos/blob/master/LICENSE)
+
+[github issue tracker]: https://github.com/automio/talos/issues
+[discord chat]: https://discord.gg/55QDD9
+

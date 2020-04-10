@@ -20,7 +20,10 @@ try:
 except ImportError:
     from distutils.core import setup
 
-install_requires = [simpy=3.0.12, numpy, pandas, tqdm]
+install_requires = ['simpy=3.0.12',
+                    'numpy',
+                    'pandas',
+                    'tqdm']
 
 if __name__ == "__main__":
 

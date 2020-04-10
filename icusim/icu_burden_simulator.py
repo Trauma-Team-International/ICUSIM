@@ -87,7 +87,7 @@ def hospital_manager(env,
             _b_ = [0] * int((1 - hospital.icu_properties[icu_type]['fatality_rate']) * 100)
             dist = _a_ + _b_
             patient_die = random.choice(dist)
-            out_time = abs(np.random.normal(0, env.now + hospital.icu_properties[icu_type]['stay_duration']))
+            out_time = abs(np.random.normal(env.now, hospital.icu_properties[icu_type]['stay_duration']))
             icu = ICU(icu_type, out_time, patient_die)
 
             hospital.daily_accepted_total[icu_type] += 1

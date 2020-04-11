@@ -209,10 +209,14 @@ def patients_arrivals(env,
                                              hospital,
                                              hours_in_day))
 
-            if env.now != 0 and hour % hours_in_day == 0:
+            # update departments every 4 hours
+            if hour % 4 == 0:
                 env.process(update_icu_departments(env,
                                                    hospital,
                                                    update_frequency_in_hours))
+
+            # update statistic every 24 hours
+            if env.now != 0 and hour % hours_in_day == 0:
                 env.process(update_statistic(env,
                                              hospital,
                                              hours_in_day))

@@ -78,7 +78,7 @@ name | default | description
 
 Released version:
 
-#### `pip install talos`
+#### `pip install icusim`
 
 Daily development version:
 

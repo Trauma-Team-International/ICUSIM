@@ -1,9 +1,0 @@
-README.md
-setup.py
-ICUSIM.egg-info/PKG-INFO
-ICUSIM.egg-info/SOURCES.txt
-ICUSIM.egg-info/dependency_links.txt
-ICUSIM.egg-info/requires.txt
-ICUSIM.egg-info/top_level.txt
-icusim/__init__.py
-icusim/icu_burden_simulator.py

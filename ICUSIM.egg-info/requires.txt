@@ -1,4 +1,0 @@
-simpy==3.0.12
-numpy
-pandas
-tqdm

@@ -97,43 +97,48 @@ Daily development version:
 
 ### Start Simulating
 
-The first step is to create a `params` function that handles randomly picking parameters and where the various parameter ranges are set. Make sure to follow parameter ranges that you can established with available empirical evidence. An fully functional example that is relevant for Finland is provided below. You can simply change the values to meet the evidence for the area/s of your interest.
+To run a simulation, you need two things:
+
+- parameter dictionary
+- `icusim.MonteCarlo()` command
+
+Make sure to follow parameter ranges that you can established with available empirical evidence. A fully functional example that is relevant for Finland is provided below. You can simply change the values to meet the evidence for the area/s of your interest.
 
 ```
-def params(show_params=False):
-    
-    import random
-    import numpy as np
-    
-    _capacity_ = random.choice(list(range(200, 1000, 50)))
-    _ventilated_capacity_ = (np.random.normal(1, 0.01) * .5)
-    _fatality_rate_ = round(random.choice(np.arange(0.2, 0.6, .01)), 2)
-    _ventilated_fatality_factor_ = random.choice(np.arange(1.3, 1.7, 0.01))
-    
-    _duration_ = random.choice(list(range(8, 25, 1)))
-    _ventilated_duration_factor_ = random.choice(np.arange(1, 1.2, 0.01))
-    
-    p = {
-         'initial_patient_count': 120,
-         'require_ventilation_rate': round(random.choice(np.arange(.3, .8, .01)), 3),
-         'days_to_simulate': 50,
-         'doubles_in_days': round(random.choice(np.arange(2.0, 12.0, .1)), 2),
-         'standard_icu_capacity': int(_capacity_ * (1 - _ventilated_capacity_)),
-         'ventilated_icu_capacity': int(_capacity_ * _ventilated_capacity_),
-         'standard_icu_fatality_rate': float(_fatality_rate_),
-         'ventilated_icu_fatality_rate': round(_fatality_rate_ * (np.random.normal(1, 0.01) * _ventilated_fatality_factor_), 2),
-         'standard_icu_stay_duration': int(_duration_),
-         'ventilated_icu_stay_duration': int(_duration_ * (np.random.normal(1, 0.01) * _ventilated_duration_factor_)),
-    }
-    
-    if show_params:
-        for key in p.keys():
-            print(key,p[key])
-    
-    return p
+params = {'initial_patient_count': 80,
+          'days_to_simulate': 50,
+          'total_capacity_min': 200,
+          'total_capacity_max': 1000,
+          'ventilated_icu_share_min': .4,
+          'ventilated_icu_share_max': .6,
+          'standard_cfr_min': 0.2,
+          'standard_cfr_max': 0.6,
+          'ventilated_cfr_min': 1.3,
+          'ventilated_cfr_max': 1.7,
+          'standard_duration_min': 8.5,
+          'standard_duration_max': 25.5,
+          'ventilated_duration_factor_min': .9,
+          'ventilated_duration_factor_max': 1.1,
+          'doubles_in_days_min': 2.0,
+          'doubles_in_days_max': 12.0,
+          'ventilation_rate_min': 0.3,
+          'ventilation_rate_max': 0.8}
+```
+Next you can start the simulation: 
+
+```
+import icusim
+results = icusim.MonteCarlo(rounds=1000, params)
 ```
 
-Run a single simulation: 
+Access the results of the simulation: 
+
+```
+results.df
+```
+
+
+You can also run a single round simulation with daily output: 
 
 ```
 import icusim
@@ -142,33 +147,6 @@ params = icusim.params()
 icusim.simulate(params)
 ```
 
-Run many simulations:
-
-```
-import icusim
-import tqdm
-
-out = []
-
-for i in tqdm(range(1000)):
-    
-    results = simulate(params())
-    df = stats_to_dataframe(results)
-    
-    round_out = df.max().tolist()
-    
-    out.appendround_out)
-```
-Get the results onto a dataframe:
-
-```
-import pandas as pd
-
-df = pd.DataFrame(out)
-columns = stats_to_dataframe(simulate(params())).columns.tolist()
-
-df.columns = columns
-```
 Draw a histogram for analyzing the results:
 
 ```

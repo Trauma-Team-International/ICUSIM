@@ -94,13 +94,13 @@ def params(initial_patient_count=120,
     p = {'initial_patient_count': int(initial_patient_count),
          'days_to_simulate': int(days_to_simulate),
          'doubles_in_days': float(doubles_in_days),
-         'require_ventilation_rate': float(require_ventilation_rate),
-         'standard_icu_capacity': int(standard_icu_capacity),
-         'ventilated_icu_capacity': int(ventilated_icu_capacity),
-         'standard_icu_fatality_rate': float(standard_icu_fatality_rate),
-         'ventilated_icu_fatality_rate': float(ventilated_icu_fatality_rate),
-         'standard_icu_stay_duration': int(standard_icu_stay_duration),
-         'ventilated_icu_stay_duration': int(ventilated_icu_stay_duration)}
+         'ventilation_rate': float(require_ventilation_rate),
+         'standard_capacity': int(standard_icu_capacity),
+         'ventilated_capacity': int(ventilated_icu_capacity),
+         'standard_cfr': float(standard_icu_fatality_rate),
+         'ventilated_cfr': float(ventilated_icu_fatality_rate),
+         'standard_duration': int(standard_icu_stay_duration),
+         'ventilated_duration': int(ventilated_icu_stay_duration)}
     
     # print out the params
     if show_params:

@@ -137,6 +137,19 @@ Access the results of the simulation:
 results.df
 ```
 
+If you want to also perform sensitivity analysis: 
+
+```
+import icusim
+results = icusim.SobolSensitivity(rounds=1000, params)
+```
+
+Once the rounds are completed, get the sensitivities: 
+
+```
+results.sensitivity('metric_name')
+```
+
 
 You can also run a single round simulation with daily output: 
 

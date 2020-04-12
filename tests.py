@@ -22,4 +22,6 @@ params = {'initial_patient_count': 80,
           'ventilation_rate_min': 0.3,
           'ventilation_rate_max': 0.8}
 
-icusim.MonteCarlo(10, params)
+results = icusim.MonteCarlo(10, params)
+results = icusim.SobolSensitivity(40, params)
+results.sensitivity()

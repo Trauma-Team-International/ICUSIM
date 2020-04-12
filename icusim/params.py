@@ -2,9 +2,10 @@ def params(initial_patient_count=120,
            days_to_simulate=50,
            capacity_min=200,
            capacity_max=1000,
-           ventilated_icu_factor=.5,
-           fatality_rate_min=.2,
-           fatality_rate_max=.6,
+           ventilated_icu_factor_min=.4,
+           ventilated_icu_factor_max=.7,
+           standard_cfr_min=.2,
+           standard_cfr_max=.6,
            ventilated_cfr_min=1.3,
            ventilated_cfr_max=1.7,
            standard_duration_min=8,
@@ -36,10 +37,10 @@ def params(initial_patient_count=120,
     _capacity_ = random.choice(range(capacity_min, capacity_max, 50))
     
     # set the fraction of ventilation capacity
-    _ventilated_capacity_ = (_random_normal_ * ventilated_icu_factor)
+    _ventilated_capacity_ = random.choice(np.arange(ventilated_icu_factor_min, ventilated_icu_factor_max, step=.01))
     
     # set standard case fatality rate
-    _fatality_rate_ = random.choice(np.arange(fatality_rate_min, fatality_rate_max, step=.01))
+    _fatality_rate_ = random.choice(np.arange(standard_cfr_min, standard_cfr_max, step=.01))
     
     # set ventilated case fatality rate
     _ventilated_fatality_factor_ = random.choice(np.arange(ventilated_cfr_min, ventilated_cfr_max, step=0.01))

@@ -14,3 +14,11 @@ def _dump_dictionary_(obj):
                 print(v)
     else:
         print(obj)
+
+def columns():
+
+    '''Helper for returning the column names'''
+
+    import icusim
+
+    return icusim.stats_to_dataframe(icusim.simulate()).columns

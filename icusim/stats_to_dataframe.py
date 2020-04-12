@@ -2,10 +2,6 @@ def stats_to_dataframe(results):
 
     import pandas as pd
 
-    # pd.set_option("display.max_rows", 5)
-    # pd.set_option("display.max_columns", 7)
-    # pd.set_option('display.width', None)
-
     out = []
     cols = []
 

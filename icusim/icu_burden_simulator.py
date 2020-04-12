@@ -269,22 +269,22 @@ def generate_random_icu_list(icu_count: int,
 
 def simulate(p: dict = {
              'initial_patient_count':  120,
-             'require_ventilation_rate':  0.3,
+             'ventilation_rate':  0.3,
              'days_to_simulate':  20,
              'doubles_in_days': 10,
-             'standard_icu_capacity': 400,
-             'ventilated_icu_capacity': 230,
-             'standard_icu_fatality_rate': 0.4,
-             'ventilated_icu_fatality_rate': 0.8,
-             'standard_icu_stay_duration': 10,
-             'ventilated_icu_stay_duration': 10},
+             'standard_capacity': 400,
+             'ventilated_capacity': 230,
+             'standard_cfr': 0.4,
+             'ventilated_cfr': 0.8,
+             'standard_duration': 10,
+             'ventilated_duration': 10},
              random_seed=None):
 
-    starting_standard_icu_count = int(p['initial_patient_count'] * (1 - p['require_ventilation_rate']))
-    starting_ventilated_icu_count = int(p['initial_patient_count'] * p['require_ventilation_rate'])
+    starting_standard_icu_count = int(p['initial_patient_count'] * (1 - p['ventilation_rate']))
+    starting_ventilated_icu_count = int(p['initial_patient_count'] * p['ventilation_rate'])
 
-    _a_ = starting_standard_icu_count > p['standard_icu_capacity']
-    _b_ = starting_ventilated_icu_count > p['ventilated_icu_capacity']
+    _a_ = starting_standard_icu_count > p['standard_capacity']
+    _b_ = starting_ventilated_icu_count > p['ventilated_capacity']
 
     if (_a_ or _b_):
         raise Exception("Starting amount can't be bigger then capacity!")
@@ -293,8 +293,8 @@ def simulate(p: dict = {
     update_frequency_in_hours = 1
 
     hours_to_simulate = p['days_to_simulate'] * hours_in_day
-    standard_icu_stay_duration = p['standard_icu_stay_duration'] * hours_in_day
-    ventilated_icu_stay_duration = p['ventilated_icu_stay_duration'] * hours_in_day
+    standard_icu_stay_duration = p['standard_duration'] * hours_in_day
+    ventilated_icu_stay_duration = p['ventilated_duration'] * hours_in_day
 
     if random_seed is not None:
         random.seed(random_seed)
@@ -306,25 +306,25 @@ def simulate(p: dict = {
     departments = [ICU_Types.standard_icu.name, ICU_Types.ventilated_icu.name]
 
     _temp_standard_icu_list_ = generate_random_icu_list(starting_standard_icu_count,
-                                                        p['standard_icu_stay_duration'],
+                                                        p['standard_duration'],
                                                         ICU_Types.standard_icu.name,
                                                         hours_in_day)
 
     _temp_ventilated_icu_list_ = generate_random_icu_list(starting_ventilated_icu_count,
-                                                          p['ventilated_icu_stay_duration'],
+                                                          p['ventilated_duration'],
                                                           ICU_Types.ventilated_icu.name,
                                                           hours_in_day)
 
-    _temp_standard_icu_dict_ = {'capacity': p['standard_icu_capacity'], 'icu_list': _temp_standard_icu_list_}
-    _temp_ventilated_icu_dict_ = {'capacity': p['ventilated_icu_capacity'], 'icu_list': _temp_ventilated_icu_list_}
+    _temp_standard_icu_dict_ = {'capacity': p['standard_capacity'], 'icu_list': _temp_standard_icu_list_}
+    _temp_ventilated_icu_dict_ = {'capacity': p['ventilated_capacity'], 'icu_list': _temp_ventilated_icu_list_}
 
     departments_capacity = {ICU_Types.standard_icu.name: _temp_standard_icu_dict_,
                             ICU_Types.ventilated_icu.name: _temp_ventilated_icu_dict_}
 
-    _temp_standard_icu_meta_ = {'fatality_rate': p['standard_icu_fatality_rate'],
+    _temp_standard_icu_meta_ = {'fatality_rate': p['standard_cfr'],
                                 'stay_duration': standard_icu_stay_duration}
 
-    _temp_ventilated_icu_meta_ = {'fatality_rate': p['ventilated_icu_fatality_rate'],
+    _temp_ventilated_icu_meta_ = {'fatality_rate': p['ventilated_cfr'],
                                   'stay_duration': ventilated_icu_stay_duration}
 
     icu_properties = {ICU_Types.standard_icu.name: _temp_standard_icu_meta_,
@@ -338,7 +338,7 @@ def simulate(p: dict = {
     hospital = Hospital(hospital_resource_manager,
                         departments,
                         departments_capacity,
-                        p['require_ventilation_rate'],
+                        p['ventilation_rate'],
                         daily_refused_total,
                         daily_accepted_total,
                         daily_released_total,

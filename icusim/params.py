@@ -68,7 +68,7 @@ def params(initial_patient_count=120,
     _ventilated_fatality_factor_ = random.choice(np.arange(ventilated_cfr_min, ventilated_cfr_max, step=0.01))
     
     # set the mean duration of standard ICU stay (ventilated is based on it
-    _standard_icu_stay_duration_ = random.choice(range(standard_duration_min, standard_duration_max, 1))
+    _standard_icu_stay_duration_ = random.choice(np.arange(standard_duration_min, standard_duration_max, step=0.1))
                        
     # set a multiplier for ventilated stay duration
     _temp_ = np.arange(ventilated_duration_factor_min, ventilated_duration_factor_max, step=0.01)                   
@@ -91,9 +91,9 @@ def params(initial_patient_count=120,
     ventilated_icu_stay_duration = standard_icu_stay_duration * _random_normal_ * _ventilated_duration_factor_
     
     # generates the input parameters
-    p = {'initial_patient_count': initial_patient_count,
-         'days_to_simulate': days_to_simulate,
-         'doubles_in_days': doubles_in_days,
+    p = {'initial_patient_count': int(initial_patient_count),
+         'days_to_simulate': int(days_to_simulate),
+         'doubles_in_days': float(doubles_in_days),
          'require_ventilation_rate': float(require_ventilation_rate),
          'standard_icu_capacity': int(standard_icu_capacity),
          'ventilated_icu_capacity': int(ventilated_icu_capacity),
@@ -105,6 +105,6 @@ def params(initial_patient_count=120,
     # print out the params
     if show_params:
         for key in p.keys():
-            print(key,p[key])
+            print(key, p[key])
     
     return p

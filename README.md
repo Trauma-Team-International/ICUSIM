@@ -59,18 +59,27 @@ ICUSIM follows a straightforward logic:
 
 Outcomes are controlled through **Input Parameters**, which are provided separately for _standard ICU_ and _ventilated ICU_.
 
-name | default | description
+name | type | description
 --- | --- | --- 
-`initial_patient_count` | 120 | number of patients to start with
-`require_ventilation_rate` | 0.3 | percentage of patients requiring ventilation
-`days_to_simulate` | 20 | number of days to simulate
-`doubles_in_days` | 10 | the number of days it takes to double daily cases
-`standard_icu_capacity` | 400 | capacity for standard ICU
-`ventilated_icu_capacity` | 230 | capacity for ventilated ICU
-`standard_icu_fatality_rate` | 0.4 | case fatality rate for standard ICU patients
-`ventilated_icu_fatality_rate` | 0.8 | case fatality rate for ventilated ICU patients
-`standard_icu_stay_duration` | 10 | mean duration of standard ICU stay
-`ventilated_icu_stay_duration` | 10 | mean duration of ventilated ICU stay
+`initial_patient_count` | int | the number of patients to start with
+`days_to_simulate` | int | number of days to simulate
+`total_capacity_min` | int | minimum for total available capacity
+`total_capacity_max` | int | maximum for total available capacity
+`ventilated_icu_share_min` | float | minimum for ventilated capacity
+`ventilated_icu_share_max` | float | maximum for ventilated capacity
+`standard_cfr_min` | float | minimum case fatality rate for standard ICU
+`standard_cfr_max` | float | maximum case fatality rate for standard ICU
+`ventilated_cfr_min` | float | minimum case fatality rate for ventilated ICU
+`ventilated_cfr_max` | float | maximum case fatality rate for ventilated ICU
+`standard_duration_min` | float | minimum mean duration for standard ICU stay
+`standard_duration_max` | float | maximum mean duration for standard ICU stay
+`ventilated_duration_factor_min` | float | minimum ratio for ventilated capacity per standard standard 
+`ventilated_duration_factor_max` | float | maximum ratio for ventilated capacity per standard standard 
+`doubles_in_days_min` | float | minimum number of days it takes for exponental growth to happen 
+`doubles_in_days_max` | float | maximum number of days it takes for eponental growth to happen
+`ventilation_rate_min` | float | minimum rate at which ventilation is required
+`ventilation_rate_max` | float | maximum rate at which ventilation is required
+`show_params` | bool | prints out the parameters if True
 
 <hr>
 

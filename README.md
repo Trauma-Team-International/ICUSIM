@@ -137,7 +137,7 @@ Access the results of the simulation:
 results.df
 ```
 
-If you want to also perform sensitivity analysis: 
+If you want to also perform **sensitivity analysis**: 
 
 ```
 import icusim
@@ -151,7 +151,7 @@ results.sensitivity('metric_name')
 ```
 
 
-You can also run a single round simulation with daily output: 
+You can also run a single round simulation with **daily output**: 
 
 ```
 import icusim
@@ -160,7 +160,7 @@ params = icusim.params()
 icusim.simulate(params)
 ```
 
-Draw a histogram for analyzing the results:
+Draw a **histogram** for analyzing the results:
 
 ```
 astetik.hist(df, 'ventilated_icu_total_demand')

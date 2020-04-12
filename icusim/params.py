@@ -44,7 +44,7 @@ def params(initial_patient_count=120,
     doubles_in_days_max | float | maximum number of days it takes for eponental growth to happen
     ventilation_rate_min | float | minimum rate at which ventilation is required
     ventilation_rate_max | float | maximum rate at which ventilation is required
-    show_params=False)
+    show_params | bool | prints out the parameters if True
     
     
     '''

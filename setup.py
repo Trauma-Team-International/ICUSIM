@@ -23,7 +23,8 @@ except ImportError:
 install_requires = ['simpy==3.0.12',
                     'numpy',
                     'pandas',
-                    'tqdm']
+                    'tqdm',
+                    'salib']
 
 if __name__ == "__main__":
 

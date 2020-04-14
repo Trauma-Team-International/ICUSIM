@@ -128,7 +128,7 @@ Next you can start the simulation:
 
 ```
 import icusim
-results = icusim.MonteCarlo(rounds=1000, params)
+results = icusim.MonteCarlo(1000, params)
 ```
 
 Access the results of the simulation: 
